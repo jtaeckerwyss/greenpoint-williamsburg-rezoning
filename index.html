@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <title>Greenpoint-Williamsburg Rezoning</title>
@@ -10,8 +11,10 @@
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 
     <!-- Geocoder CSS & JS -->
-    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" />
-    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+    <link rel="stylesheet"
+        href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" />
+    <script
+        src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
 
     <!-- Turf.js -->
     <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
@@ -27,6 +30,37 @@
             <h1>Greenpoint-Williamsburg Rezoning (2005)</h1>
             <div id="header-subtitle">Hover over the map to understand how the zoning code changed.</div>
         </div>
+
+        <!-- Legend -->
+        <div id="legend"
+            style="background:black; color:white; padding:10px; border-radius:8px; font-size:14px; max-width:240px;">
+            <strong>Zoning Change Legend</strong><br>
+            <div><span
+                    style="background:#1976D2; width:12px; height:12px; display:inline-block; margin-right:6px;"></span>Upzoned
+                (M to R)</div>
+            <div><span
+                    style="background:#64B5F6; width:12px; height:12px; display:inline-block; margin-right:6px;"></span>Upzoned
+                (R to R)</div>
+            <div><span
+                    style="background:#BA68C8; width:12px; height:12px; display:inline-block; margin-right:6px;"></span>Mixed-Use
+                Rezoning</div>
+            <div><span
+                    style="background:#EF5350; width:12px; height:12px; display:inline-block; margin-right:6px;"></span>Contextual
+                Zoning</div>
+            <div><span
+                    style="background:#FB8C00; width:12px; height:12px; display:inline-block; margin-right:6px;"></span>Continued
+                Manufacturing</div>
+            <div><span
+                    style="background:#C62828; width:12px; height:12px; display:inline-block; margin-right:6px;"></span>Downzoned
+            </div>
+            <div><span
+                    style="background:#E0E0E0; width:12px; height:12px; display:inline-block; margin-right:6px;"></span>Unchanged
+            </div>
+            <div><span
+                    style="background:#66BB6A; width:12px; height:12px; display:inline-block; margin-right:6px;"></span>Parks
+            </div>
+        </div>
+
     </div>
 
     <!-- Map Container -->
@@ -35,4 +69,5 @@
     <!-- Custom JS -->
     <script src="script.js" defer></script>
 </body>
+
 </html>

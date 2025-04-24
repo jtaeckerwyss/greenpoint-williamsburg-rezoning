@@ -7,7 +7,7 @@ const map = new mapboxgl.Map({
 });
 
 map.on('load', () => {
-    fetch('./gwzd.geojson')
+    fetch('./gwzd_v3.geojson')
         .then(response => response.json())
         .then(data => {
             map.addSource('greenpoint-williamsburg', {
@@ -20,8 +20,20 @@ map.on('load', () => {
                 type: 'fill',
                 source: 'greenpoint-williamsburg',
                 paint: {
-                    'fill-color': '#00BCD4',
-                    'fill-opacity': 0.5
+                    'fill-color': [
+                        'match',
+                        ['get', 'ZONING_CHANGE_TYPE'],
+                        'Upzoned_M_to_R', '#1976D2',
+                        'Upzoned_R_to_R', '#64B5F6',
+                        'Mixed_Use', '#BA68C8',
+                        'Contextual', '#EF5350',
+                        'Continued_Manufacturing', '#FB8C00',
+                        'Downzoned', '#C62828',
+                        'Unchanged', '#E0E0E0',
+                        'PARK', '#66BB6A',
+                        '#000000' // fallback
+                    ],
+                    'fill-opacity': 0.4
                 }
             });
 
