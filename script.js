@@ -7,7 +7,7 @@ const map = new mapboxgl.Map({
 });
 
 map.on('load', () => {
-    fetch('./gwzd_v3.geojson')
+    fetch('./gwzd_v4.geojson')
         .then(response => response.json())
         .then(data => {
             map.addSource('greenpoint-williamsburg', {
@@ -31,7 +31,7 @@ map.on('load', () => {
                         'Downzoned', '#C62828',
                         'Unchanged', '#E0E0E0',
                         'PARK', '#66BB6A',
-                        '#000000' // fallback
+                        '#000000'
                     ],
                     'fill-opacity': 0.4
                 }
@@ -47,18 +47,40 @@ map.on('load', () => {
                 }
             });
 
-            // ✅ Delay fitBounds until map finishes rendering
+            // ✅ Zoom to bounds
             map.once('idle', () => {
-                const bounds = turf.bbox(data); // [west, south, east, north]
+                const bounds = turf.bbox(data);
+                bounds[0] += 0.002;
+                bounds[2] += 0.002;
+                map.fitBounds(bounds, { padding: 40, maxZoom: 15 });
+            });
 
-                // Move the entire box slightly east (shift west/east bounds)
-                bounds[0] += 0.002; // move west edge east
-                bounds[2] += 0.002; // move east edge east
+            // 🖱 Hover popup
+            const popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick: false
+            });
 
-                map.fitBounds(bounds, {
-                    padding: 40,
-                    maxZoom: 15
-                });
+            map.on('mousemove', 'gwzd-fill', (e) => {
+                map.getCanvas().style.cursor = 'pointer';
+
+                const props = e.features[0].properties;
+
+                const description = `
+                    <strong>${props.NEIGHBORHOOD}</strong><br>
+                    Prior Zoning: ${props.PRIOR_ZONING}<br>
+                    New Zoning: ${props.ZONEDIST}
+                `;
+
+                popup
+                    .setLngLat(e.lngLat)
+                    .setHTML(description)
+                    .addTo(map);
+            });
+
+            map.on('mouseleave', 'gwzd-fill', () => {
+                map.getCanvas().style.cursor = '';
+                popup.remove();
             });
         })
         .catch(error => {
