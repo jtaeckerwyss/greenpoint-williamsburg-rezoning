@@ -71,7 +71,11 @@ map.on('load', () => {
             // Hover Popup
             const popup = new mapboxgl.Popup({
                 closeButton: false,
-                closeOnClick: false
+                closeOnClick: false,
+                anchor: 'bottom',
+                offset: [0, -10]  // small offset so it's nicely spaced under the cursor
+            });
+            
             });
 
             map.on('mousemove', 'gwzd-fill', (e) => {
