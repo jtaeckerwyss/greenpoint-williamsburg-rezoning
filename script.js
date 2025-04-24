@@ -3,10 +3,10 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZGJlcmdlcjMyNCIsImEiOiJjbTkxejI1ODYwMGQ1Mmxvb
 // Zoning center and zoom
 const map = new mapboxgl.Map({
     container: 'map-container',
-    center: [-73.947, 40.7195],
-    zoom: 13.5,
+    center: [-74.0, 40.7195],
+    zoom: 12.5,
     style: 'mapbox://styles/mapbox/dark-v11',
-    maxBounds: [[-73.961, 40.709], [-73.933, 40.730]],
+    maxBounds: [[-73.961, 40.709], [-73.933, 40.740]],
     pitch: 20,
 });
 
