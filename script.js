@@ -37,7 +37,12 @@ map.on('load', () => {
 
             // ✅ Delay fitBounds until map finishes rendering
             map.once('idle', () => {
-                const bounds = turf.bbox(data);
+                const bounds = turf.bbox(data); // [west, south, east, north]
+
+                // Move the entire box slightly east (shift west/east bounds)
+                bounds[0] += 0.002; // move west edge east
+                bounds[2] += 0.002; // move east edge east
+
                 map.fitBounds(bounds, {
                     padding: 40,
                     maxZoom: 15
