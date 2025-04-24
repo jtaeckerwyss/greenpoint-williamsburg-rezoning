@@ -16,6 +16,21 @@ body {
     left: 0;
     right: 0;
 }
+
+.mapboxgl-popup-content {
+    background-color: black !important;
+    color: white !important;
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 13px;
+    font-family: sans-serif;
+    line-height: 1.15;
+}
+
+.mapboxgl-popup-tip {
+    display: none !important; /* Removes the little white triangle tail */
+}
+
 #sidebar-container {
     position: absolute;
     top: 4px;
