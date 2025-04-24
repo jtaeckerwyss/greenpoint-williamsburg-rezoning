@@ -19,7 +19,10 @@ map.on('load', () => {
         .then(data => {
             // Fix misclassified polygon
             for (const feature of data.features) {
-                if (feature.properties.ZONING_CHANGE_TYPE === undefined || feature.properties.ZONING_CHANGE_TYPE === "Downzoned_or_Other") {
+                if (
+                    feature.properties.ZONING_CHANGE_TYPE === undefined ||
+                    feature.properties.ZONING_CHANGE_TYPE === "Downzoned_or_Other"
+                ) {
                     feature.properties.ZONING_CHANGE_TYPE = "Continued_Manufacturing";
                 }
             }
@@ -45,7 +48,7 @@ map.on('load', () => {
                         'Downzoned', '#E0E0E0',
                         'Unchanged', '#E0E0E0',
                         'PARK', '#66BB6A',
-                        '#E0E0E0' // fallback to "Unchanged/Other"
+                        '#E0E0E0'
                     ],
                     'fill-opacity': 0.4
                 }
@@ -73,9 +76,7 @@ map.on('load', () => {
                 closeButton: false,
                 closeOnClick: false,
                 anchor: 'bottom',
-                offset: [0, -10]  // small offset so it's nicely spaced under the cursor
-            });
-            
+                offset: [0, -10]
             });
 
             map.on('mousemove', 'gwzd-fill', (e) => {
