@@ -3,13 +3,27 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZGJlcmdlcjMyNCIsImEiOiJjbTkxejI1ODYwMGQ1Mmxvb
 const map = new mapboxgl.Map({
     container: 'map-container',
     style: 'mapbox://styles/mapbox/dark-v11',
-    pitch: 20
+    pitchWithRotate: false,
+    dragRotate: false,
+    dragPan: false,
+    touchZoomRotate: false,
+    scrollZoom: false,
+    doubleClickZoom: false,
+    boxZoom: false,
+    keyboard: false
 });
 
 map.on('load', () => {
     fetch('./gwzd_v4.geojson')
         .then(response => response.json())
         .then(data => {
+            // Fix misclassified polygon
+            for (const feature of data.features) {
+                if (feature.properties.ZONING_CHANGE_TYPE === undefined || feature.properties.ZONING_CHANGE_TYPE === "Downzoned_or_Other") {
+                    feature.properties.ZONING_CHANGE_TYPE = "Continued_Manufacturing";
+                }
+            }
+
             map.addSource('greenpoint-williamsburg', {
                 type: 'geojson',
                 data: data
@@ -24,14 +38,14 @@ map.on('load', () => {
                         'match',
                         ['get', 'ZONING_CHANGE_TYPE'],
                         'Upzoned_M_to_R', '#1976D2',
-                        'Upzoned_R_to_R', '#64B5F6',
+                        'Upzoned_R_to_R', '#1976D2',
                         'Mixed_Use', '#BA68C8',
-                        'Contextual', '#EF5350',
+                        'Contextual', '#1976D2',
                         'Continued_Manufacturing', '#FB8C00',
-                        'Downzoned', '#C62828',
+                        'Downzoned', '#E0E0E0',
                         'Unchanged', '#E0E0E0',
                         'PARK', '#66BB6A',
-                        '#000000'
+                        '#E0E0E0' // fallback to "Unchanged/Other"
                     ],
                     'fill-opacity': 0.4
                 }
@@ -47,7 +61,6 @@ map.on('load', () => {
                 }
             });
 
-            // ✅ Zoom to bounds
             map.once('idle', () => {
                 const bounds = turf.bbox(data);
                 bounds[0] += 0.002;
@@ -55,7 +68,7 @@ map.on('load', () => {
                 map.fitBounds(bounds, { padding: 40, maxZoom: 15 });
             });
 
-            // 🖱 Hover popup
+            // Hover Popup
             const popup = new mapboxgl.Popup({
                 closeButton: false,
                 closeOnClick: false
@@ -63,19 +76,25 @@ map.on('load', () => {
 
             map.on('mousemove', 'gwzd-fill', (e) => {
                 map.getCanvas().style.cursor = 'pointer';
-
                 const props = e.features[0].properties;
 
                 const description = `
-                    <strong>${props.NEIGHBORHOOD}</strong><br>
-                    Prior Zoning: ${props.PRIOR_ZONING}<br>
-                    New Zoning: ${props.ZONEDIST}
+                    <div style="
+                        background:black;
+                        color:white;
+                        padding:8px;
+                        border-radius:6px;
+                        line-height:1.15;
+                        font-family:sans-serif;
+                        font-size:13px;
+                    ">
+                        <strong>${props.NEIGHBORHOOD}</strong><br>
+                        Prior Zoning: ${props.PRIOR_ZONING}<br>
+                        New Zoning: ${props.ZONEDIST}
+                    </div>
                 `;
 
-                popup
-                    .setLngLat(e.lngLat)
-                    .setHTML(description)
-                    .addTo(map);
+                popup.setLngLat(e.lngLat).setHTML(description).addTo(map);
             });
 
             map.on('mouseleave', 'gwzd-fill', () => {
